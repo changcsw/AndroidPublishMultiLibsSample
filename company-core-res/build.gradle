@@ -1,0 +1,56 @@
+plugins {
+    id 'com.android.library'
+}
+
+project.group = "com.esdk.sdk"
+project.version = project.ext.alphaVersion
+project.description = String.format(Locale.ENGLISH, "esdk alpha library. " +
+        "git:%s  time:%s", getGitSHA(), releaseTime())
+
+android {
+    namespace 'com.esdk.sdk.alpha'
+
+    compileSdkVersion rootProject.ext.androids.compileSdkVersion
+
+    defaultConfig {
+        minSdkVersion rootProject.ext.androids.minSdkVersion
+        targetSdkVersion rootProject.ext.androids.targetSdkVersion
+
+        buildConfigField "String", "VERSION_NAME", "\"$project.version\""
+
+        consumerProguardFiles 'proguard-rules.pro'
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    flavorDimensions('version')
+    productFlavors {
+        global {
+
+        }
+        cn {
+
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    lint {
+        checkDependencies true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+}
+
+apply from: "${rootDir}/maven-multi-libs.gradle"

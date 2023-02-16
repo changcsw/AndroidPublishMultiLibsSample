@@ -1,0 +1,22 @@
+project.ext {
+    // 这里不要用android, android 在gradle里是关键字
+    androids = [
+            compileSdkVersion: 33,
+            minSdkVersion    : 19,
+            targetSdkVersion : 33
+    ]
+
+    dependVersion = [
+
+    ]
+    dependencies = [
+            appcompat : "androidx.appcompat:appcompat:1.3.1",
+            annotation: "androidx.annotation:annotation:1.5.0"
+    ]
+
+    // build flag
+    snapshot = true
+
+    // maven release version
+    alphaVersion = '1.0.0'
+}

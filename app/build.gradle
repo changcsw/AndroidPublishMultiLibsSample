@@ -1,0 +1,73 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion rootProject.ext.androids.compileSdkVersion
+    defaultConfig {
+        applicationId "com.esdk.sample"
+
+        minSdkVersion rootProject.ext.androids.minSdkVersion
+        targetSdkVersion rootProject.ext.androids.targetSdkVersion
+        versionCode 1
+        versionName "1.0.0"
+
+        multiDexEnabled true
+
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
+        }
+    }
+
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['libs']
+        }
+    }
+
+    viewBinding {
+        enabled = true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true // 代码优化、缩减
+            shrinkResources true // 资源优化、缩减
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            // SYMBOL_TABLE or FULL ,原生符号表类型，最大300MB,过大的话应用 SYMBOL_TABLE
+            ndk.debugSymbolLevel = "SYMBOL_TABLE"
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    signingConfigs {
+//        debug {
+//            storeFile file("../../signature/xxx.jks")
+//            storePassword "xxx"
+//            keyAlias "xxxx"
+//            keyPassword "xxxx"
+//        }
+
+//        release {
+//            def keystoreProperties = new Properties()
+//            keystoreProperties.load(new FileInputStream(rootProject.file("keystore.properties")))
+//
+//            storeFile file(keystoreProperties['storeFile'])
+//            storePassword keystoreProperties['storePassword']
+//            keyAlias keystoreProperties['keyAlias']
+//            keyPassword keystoreProperties['keyPassword']
+//        }
+    }
+    lint {
+        checkDependencies true
+    }
+    namespace 'com.esdk.sdk.demo'
+
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+}

@@ -1,0 +1,60 @@
+apply plugin: 'maven-publish'
+
+afterEvaluate {
+    publishing {
+        android.libraryVariants.each { variant ->
+            if (variant.buildType.name == "release") {
+                publications.create variant.flavorName, MavenPublication, {
+                    groupId project.group // artifact所属Group Id
+                    version project.ext.snapshot ? project.version + "-SNAPSHOT" : project.version
+                    artifactId variant.flavorName != "" ? "$project.name-$variant.flavorName" : project.name
+                    artifact(variant.outputs*.outputFile.get(0))
+                    pom {
+                        name = variant.flavorName != "" ? "$project.name-$variant.flavorName" : project.name
+                        // artifact名称
+                        packaging = "aar" // 文件格式，例如jar、aar
+                        description = project.description // 描述
+                        url = ""
+                    }
+
+                    pom.withXml {
+                        def dependenciesNode = asNode().appendNode('dependencies')
+                        configurations.implementation.allDependencies.each {
+                            // 避免出现空节点或 artifactId=unspecified 的节点
+                            if (it.group != null && (it.name != null && "unspecified" != it.name) && it.version != null) {
+                                // println it.toString()
+                                def dependencyNode = dependenciesNode.appendNode('dependency')
+                                dependencyNode.appendNode('groupId', it.group)
+                                dependencyNode.appendNode('artifactId', it.name)
+                                if (it.group == "com.esdk.sdk" && project.ext.snapshot) {
+                                    dependencyNode.appendNode('version', it.version + "-SNAPSHOT")
+                                } else {
+                                    dependencyNode.appendNode('version', it.version)
+                                }
+                                dependencyNode.appendNode('scope', 'implementation')
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        tasks.publish.dependsOn tasks.assemble
+
+        repositories {
+            maven {
+                name = "nexus"
+                // url = "$buildDir/repo"
+                // change URLs to point to your repos, e.g. http://my.org/repo
+                def releaseRepoUrl = "http://10.1.4.209:8081/repository/maven-releases/"
+                def snapshotRepoUrl = "http://10.1.4.209:8081/repository/maven-snapshots/"
+                url = project.ext.snapshot ? snapshotRepoUrl : releaseRepoUrl
+                credentials {
+                    username = "admin"
+                    password = "admin123"
+                }
+
+                allowInsecureProtocol = true
+            }
+        }
+    }
+}

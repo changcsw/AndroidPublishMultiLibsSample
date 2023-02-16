@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="facebook_app_id" translatable="false">344660897847414</string>
+    <string name="fb_login_protocol_scheme" translatable="false">fb344660897847414</string>
+    <string name="facebook_client_token" translatable="false">7e1bfb1de365f1eb12193b13df1f2b92</string>
+
+    <string name="com.twitter.sdk.android.CONSUMER_KEY" translatable="false">JSZ2p4S8QaD133FofxWHdHywQ</string>
+    <string name="com.twitter.sdk.android.CONSUMER_SECRET" translatable="false">fOXUsa2qP4Lg0MfqpMuRu4svBrC9TvL8ntLdmnsnRC061SUF6X</string>
+
+    <integer name="com_vk_sdk_AppId">7881115</integer>
+
+    <!-- google play games config-->
+    <string name="game_services_project_id" translatable="false">397057852154</string>
+</resources>
